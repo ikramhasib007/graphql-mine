@@ -2,13 +2,49 @@ import { GraphQLServer } from 'graphql-yoga';
 
 // Scalar Types = String, Boolean, Int, Float, ID
 // Non-Scalar/Custom Types = Array, Object
-
+const users = [
+  {
+    id: '1',
+    name: 'Ikram',
+    email: 'ikramhasib007@gmail.com',
+    age: 32
+  },
+  {
+    id: '2',
+    name: 'Sarah',
+    email: 'sarah@gmail.com'
+  },
+  {
+    id: '3',
+    name: 'John',
+    email: 'john@gmail.com'
+  },
+]
+const posts = [
+  {
+    id: '1',
+    title: 'test title 1',
+    body: 'test body 1',
+    published: false
+  },
+  {
+    id: '2',
+    title: 'summer section sale',
+    body: 'hello there is all about summer sale',
+    published: true
+  },
+  {
+    id: '3',
+    title: 'winter is comming',
+    body: 'summer is almost gone',
+    published: true
+  },
+]
 // Type Definations (Schema) / Application Schema
 const typeDefs = `
   type Query {
-    greeting(name: String, position: String): String!
-    add(a: Float!, b: Float!): Float!
-    grades: [Int!]!
+    users(query: String): [User!]!
+    posts(query: String): [Post!]!
     me: User!
     post: Post!
   }
@@ -31,15 +67,21 @@ const typeDefs = `
 // Resolvers / Function
 const resolvers = {
   Query: {
-    greeting(parent, args, ctx, info) {
-      if(args.name && args.position) return `Hello ${args.name}! You are my favorite ${args.position}.`
-      return 'Hello!'
+    users(parent, args, ctx, info) {
+      if(!args.query) return users;
+      
+      return users.filter((user) => user.name.toLowerCase().includes(args.query.toLowerCase()))
     },
-    add(parent, args, ctx, info) {
-      return args.a + args.b
-    },
-    grades(parent, args, ctx, info) {
-      return [99, 80, 86]
+    posts(parent, args, ctx, info) {
+      if(!args.query) return posts;
+
+      return posts.filter((post) => {
+        const isTitleMatched = post.title.toLowerCase().includes(args.query.toLowerCase());
+        const isBodyMatched = post.body.toLowerCase().includes(args.query.toLowerCase());
+
+        return isTitleMatched || isBodyMatched;
+          
+      })
     },
     me() {
       return {
