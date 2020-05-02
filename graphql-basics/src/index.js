@@ -25,19 +25,22 @@ const posts = [
     id: '1',
     title: 'test title 1',
     body: 'test body 1',
-    published: false
+    published: false,
+    author: '1'
   },
   {
     id: '2',
     title: 'summer section sale',
     body: 'hello there is all about summer sale',
-    published: true
+    published: true,
+    author: '1'
   },
   {
     id: '3',
     title: 'winter is comming',
     body: 'summer is almost gone',
-    published: true
+    published: true,
+    author: '2'
   },
 ]
 // Type Definations (Schema) / Application Schema
@@ -50,17 +53,18 @@ const typeDefs = `
   }
 
   type User {
-    id: ID!,
-    name: String!,
-    email: String!,
+    id: ID!
+    name: String!
+    email: String!
     age: Int
   }
 
   type Post {
     id: ID!
-    title: String!,
-    body: String!,
+    title: String!
+    body: String!
     published: Boolean!
+    author: User!
   }
 `
 
@@ -98,6 +102,11 @@ const resolvers = {
         body: 'This is my post body',
         published: false
       }
+    }
+  },
+  Post: {
+    author(parent, args, ctx, info) {
+      return users.find((user) => user.id === parent.author)
     }
   }
 }
