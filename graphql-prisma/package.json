@@ -1,7 +1,7 @@
 {
-  "name": "graphql-basics",
+  "name": "graphql-prisma",
   "version": "1.0.0",
-  "description": "GraphQL Basics",
+  "description": "GraphQL Prisma Basics",
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
