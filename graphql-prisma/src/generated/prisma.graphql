@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Jan 02 2021 02:25:46 GMT+0600 (Bangladesh Standard Time)
+# timestamp: Sat Jan 09 2021 16:39:07 GMT+0600 (Bangladesh Standard Time)
 
 type AggregateComment {
   count: Int!
@@ -21,8 +21,8 @@ type BatchPayload {
 type Comment implements Node {
   id: ID!
   text: String!
-  post: Post!
   author: User!
+  post: Post!
 }
 
 """A connection to a list of items."""
@@ -38,8 +38,8 @@ type CommentConnection {
 input CommentCreateInput {
   id: ID
   text: String!
-  post: PostCreateOneWithoutCommentsInput!
   author: UserCreateOneWithoutCommentsInput!
+  post: PostCreateOneWithoutCommentsInput!
 }
 
 input CommentCreateManyWithoutAuthorInput {
@@ -217,8 +217,8 @@ input CommentSubscriptionWhereInput {
 
 input CommentUpdateInput {
   text: String
-  post: PostUpdateOneRequiredWithoutCommentsInput
   author: UserUpdateOneRequiredWithoutCommentsInput
+  post: PostUpdateOneRequiredWithoutCommentsInput
 }
 
 input CommentUpdateManyDataInput {
@@ -379,8 +379,8 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   text_not_ends_with: String
-  post: PostWhereInput
   author: UserWhereInput
+  post: PostWhereInput
 }
 
 input CommentWhereUniqueInput {
