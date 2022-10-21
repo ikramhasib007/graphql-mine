@@ -1,5 +1,6 @@
 import { createServer } from "@graphql-yoga/node";
 import { createContext } from "./context";
+import { resolvers } from "./resolvers";
 
 const server = createServer({
   schema: {
@@ -9,6 +10,10 @@ const server = createServer({
         user(id: ID!): User!
         posts: [Post!]!
         post(id: ID!): Post!
+      }
+
+      type Mutation {
+        createUser(data: CreateUserInput!): User!
       }
 
       type User {
@@ -44,27 +49,13 @@ const server = createServer({
         user: User
         post: Post
       }
+
+      input CreateUserInput {
+        name: String!
+        email: String!
+      }
     `,
-    resolvers: {
-      Query: {
-        users: (parent, args, context, info) => {
-          return context.prisma.user.findMany();
-        },
-        user: (parent, args, context, info) => {
-          return context.prisma.user.findFirstOrThrow({
-            where: { id: args.id },
-          });
-        },
-        posts: (parent, args, context, info) => {
-          return context.prisma.user.findMany();
-        },
-        post: (parent, args, context, info) => {
-          return context.prisma.user.findFirstOrThrow({
-            where: { id: args.id },
-          });
-        },
-      },
-    },
+    resolvers,
   },
   context: createContext,
 });
