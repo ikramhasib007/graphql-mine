@@ -1,0 +1,14 @@
+type Subscription {
+  user: UserSubscriptionPayload
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  data: User!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}

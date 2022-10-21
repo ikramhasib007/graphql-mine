@@ -4,6 +4,7 @@ import { GraphQLResolveInfo } from "graphql";
 import type { GraphQLContext } from "../../context";
 import type { User } from "@prisma/client";
 import { PrismaError } from "prisma-error-enum";
+import type { UserSubscriptionPayload } from "../Subscription";
 
 interface CreateUserData {
   data: {
@@ -25,6 +26,14 @@ const Mutation = {
         data: args.data,
         ...select,
       });
+
+      context.pubSub.publish("user", {
+        user: {
+          mutation: "CREATED",
+          data: user,
+        },
+      });
+
       return user;
     } catch (error: any) {
       if (
