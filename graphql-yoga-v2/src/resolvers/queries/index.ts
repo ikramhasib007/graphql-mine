@@ -3,6 +3,7 @@ import { GraphQLResolveInfo } from "graphql";
 import { GraphQLContext } from "../../context";
 import type { Post } from "@prisma/client";
 import type { User } from "@prisma/client";
+import { PrismaSelect } from "@paljs/plugins";
 
 interface IdParamsArgs {
   id: string;
@@ -15,7 +16,8 @@ const Query = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
-    return context.prisma.user.findMany();
+    const select = new PrismaSelect(info).value;
+    return context.prisma.user.findMany({ ...select });
   },
   user: (
     parent: User,
@@ -23,8 +25,10 @@ const Query = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
+    const select = new PrismaSelect(info).value;
     return context.prisma.user.findFirstOrThrow({
       where: { id: args.id },
+      ...select,
     });
   },
   posts: (
@@ -33,7 +37,8 @@ const Query = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
-    return context.prisma.user.findMany();
+    const select = new PrismaSelect(info).value;
+    return context.prisma.user.findMany({ ...select });
   },
   post: (
     parent: Post,
@@ -41,8 +46,10 @@ const Query = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
+    const select = new PrismaSelect(info).value;
     return context.prisma.user.findFirstOrThrow({
       where: { id: args.id },
+      ...select,
     });
   },
 };

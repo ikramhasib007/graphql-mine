@@ -24,6 +24,7 @@
   "dependencies": {
     "@graphql-tools/load-files": "^6.6.1",
     "@graphql-yoga/node": "^2.13.13",
+    "@paljs/plugins": "^4.1.0",
     "@prisma/client": "^4.5.0",
     "graphql": "^16.6.0"
   },

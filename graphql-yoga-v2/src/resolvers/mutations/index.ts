@@ -1,3 +1,4 @@
+import { PrismaSelect } from "@paljs/plugins";
 import { GraphQLResolveInfo } from "graphql";
 import type { GraphQLContext } from "../../context";
 
@@ -15,10 +16,10 @@ const Mutation = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) {
+    const select = new PrismaSelect(info).value;
     return context.prisma.user.create({
-      data: {
-        ...args.data,
-      },
+      data: args.data,
+      ...select,
     });
   },
 };
