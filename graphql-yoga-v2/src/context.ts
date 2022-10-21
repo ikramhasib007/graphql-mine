@@ -8,10 +8,12 @@ const pubSub = createPubSub();
 export interface GraphQLContext {
   prisma: PrismaClient;
   pubSub: PubSub<{}>;
+  request: Request;
 }
 
-export function createContext(): GraphQLContext {
+export function createContext(request: Request): GraphQLContext {
   return {
+    request,
     prisma,
     pubSub,
   };
