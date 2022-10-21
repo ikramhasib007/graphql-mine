@@ -1,6 +1,9 @@
+import { GraphQLYogaError } from "@graphql-yoga/node";
 import { PrismaSelect } from "@paljs/plugins";
 import { GraphQLResolveInfo } from "graphql";
 import type { GraphQLContext } from "../../context";
+import type { User } from "@prisma/client";
+import { PrismaError } from "prisma-error-enum";
 
 interface CreateUserData {
   data: {
@@ -16,11 +19,24 @@ const Mutation = {
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) {
-    const select = new PrismaSelect(info).value;
-    return context.prisma.user.create({
-      data: args.data,
-      ...select,
-    });
+    try {
+      const select = new PrismaSelect(info).value;
+      const user: User = await context.prisma.user.create({
+        data: args.data,
+        ...select,
+      });
+      return user;
+    } catch (error: any) {
+      if (
+        error.code === PrismaError.UniqueConstraintViolation &&
+        error.meta.target[0] === "email"
+      ) {
+        throw new GraphQLYogaError(
+          "This email is already registered by another user"
+        );
+      }
+      throw new GraphQLYogaError(error);
+    }
   },
 };
 
