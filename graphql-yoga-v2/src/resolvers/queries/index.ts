@@ -4,7 +4,7 @@ import { GraphQLContext } from "../../context";
 import type { Post } from "@prisma/client";
 import type { User } from "@prisma/client";
 
-interface IDParamsArgs {
+interface IdParamsArgs {
   id: string;
 }
 
@@ -19,7 +19,7 @@ const Query = {
   },
   user: (
     parent: User,
-    args: IDParamsArgs,
+    args: IdParamsArgs,
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
@@ -37,7 +37,7 @@ const Query = {
   },
   post: (
     parent: Post,
-    args: IDParamsArgs,
+    args: IdParamsArgs,
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
