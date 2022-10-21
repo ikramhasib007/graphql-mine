@@ -1,4 +1,7 @@
-import { createServer } from "@graphql-yoga/node";
+import { createServer, createPubSub } from "@graphql-yoga/node";
+import prisma from "./prisma";
+
+const pubSub = createPubSub();
 
 const server = createServer({
   schema: {
@@ -13,6 +16,15 @@ const server = createServer({
       },
     },
   },
+  context(request) {
+    return {
+      request,
+      prisma,
+      pubSub,
+    };
+  },
 });
 
-server.start();
+server.start().then(() => {
+  console.log(`🚀 Server ready`);
+});

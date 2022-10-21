@@ -5,17 +5,21 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
     "migrate": "npx prisma migrate dev",
+    "migrate:prod": "npm run db-clean && npx prisma migrate dev --create-only --name initial_migration && npm run deploy",
     "migrate-reset": "npx prisma migrate reset",
     "migrate-resolve": "npx prisma migrate resolve",
+    "migrate-clean": "npm run db-clean && npx prisma migrate dev --name initial_migration",
     "generate": "npx prisma generate",
     "deploy": "npx prisma migrate deploy",
     "db-push": "npx prisma db push",
     "studio-dev": "npx prisma studio",
+    "db-clean": "rimraf ./prisma/migrations",
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/index.js"
   },
   "license": "MIT",
   "dependencies": {
+    "@graphql-tools/load-files": "^6.6.1",
     "@graphql-yoga/node": "^2.13.13",
     "@prisma/client": "^4.5.0",
     "graphql": "^16.6.0"
@@ -23,6 +27,7 @@
   "devDependencies": {
     "@types/node": "^18.11.3",
     "cross-env": "^7.0.3",
+    "ngrok": "^4.3.3",
     "prisma": "^4.5.0",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
