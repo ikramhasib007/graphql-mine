@@ -11,29 +11,35 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  password String?
-  name     String?
-  photo    File?
-  profile  Profile?
-  posts    Post[]
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  name      String?
+  photo     File?
+  profile   Profile?
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Profile {
-  id     String  @id @default(cuid())
-  bio    String?
-  userId String? @unique
-  user   User?   @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  bio       String?
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
-  id       String  @id @default(cuid())
-  title    String
-  content  String?
-  photos   File[]
-  authorId String
-  author   User    @relation(fields: [authorId], references: [id])
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  photos    File[]
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model File {

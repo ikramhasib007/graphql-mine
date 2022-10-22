@@ -1,3 +1,6 @@
+scalar Date
+scalar Json
+
 type User {
   id: ID!
   email: String!
@@ -6,12 +9,16 @@ type User {
   photo: File
   profile: Profile
   posts: [Post!]!
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type Profile {
   id: ID!
   bio: String
   user: User
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type Post {
@@ -20,6 +27,8 @@ type Post {
   content: String
   photos: [File!]!
   author: User
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 type File {
