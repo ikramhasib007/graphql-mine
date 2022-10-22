@@ -10,6 +10,7 @@ interface CreateUserData {
   data: {
     name: string;
     email: string;
+    bio: string;
   };
 }
 
@@ -23,7 +24,15 @@ const Mutation = {
     try {
       const select = new PrismaSelect(info).value;
       const user: User = await context.prisma.user.create({
-        data: args.data,
+        data: {
+          name: args.data.name,
+          email: args.data.email,
+          profile: {
+            create: {
+              bio: args.data.bio,
+            },
+          },
+        },
         ...select,
       });
 

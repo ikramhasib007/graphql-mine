@@ -5,9 +5,9 @@ import { GET_USERS } from '../../operations/user'
 
 function Users() {
   const { data, loading } = useQuery(GET_USERS)
-  console.log('data, loading: ', data, loading);
+  console.log('[Users] data, loading: ', data, loading);
 
-  if (loading) return 'loading...'
+  if (loading) return <p className='mt-8 px-6'>loading...</p>
 
   if (!data) return null
 

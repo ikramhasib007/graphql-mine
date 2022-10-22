@@ -5,6 +5,7 @@ import {
   ChevronUpDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid'
+import UserCreate from '../components/user/Create'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: true },
@@ -23,6 +24,7 @@ export function classNames(...classes) {
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -497,11 +499,14 @@ function Layout({ children }) {
                 <button
                   type="button"
                   className="order-0 inline-flex items-center rounded-md border border-transparent bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 sm:order-1 sm:ml-3"
+                  onClick={() => setOpen(true)}
                 >
                   Create
                 </button>
               </div>
             </div>
+
+            {open && <UserCreate dismiss={() => setOpen(false)} />}
 
             {children}
 

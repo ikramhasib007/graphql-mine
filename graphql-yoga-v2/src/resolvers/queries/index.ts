@@ -1,4 +1,4 @@
-import { DefaultArgs } from "@graphql-yoga/node";
+import { DefaultArgs, GraphQLYogaError } from "@graphql-yoga/node";
 import { GraphQLResolveInfo } from "graphql";
 import { GraphQLContext } from "../../context";
 import type { Post } from "@prisma/client";
@@ -10,14 +10,19 @@ interface IdParamsArgs {
 }
 
 const Query = {
-  users: (
+  users: async (
     parent: User[],
     args: DefaultArgs,
     context: GraphQLContext,
     info: GraphQLResolveInfo
   ) => {
-    const select = new PrismaSelect(info).value;
-    return context.prisma.user.findMany({ ...select });
+    try {
+      const select = new PrismaSelect(info).value;
+      const users = await context.prisma.user.findMany({ ...select });
+      return users;
+    } catch (error: any) {
+      throw new GraphQLYogaError(error);
+    }
   },
   user: (
     parent: User,
