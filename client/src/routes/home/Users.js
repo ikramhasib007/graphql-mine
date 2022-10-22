@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client'
 import React from 'react'
 import { classNames } from '../../layout'
+import { SUBSCRIBE_USER } from '../../operations/subscription'
 import { GET_USERS } from '../../operations/user'
+import LatestUser from './LatestUser'
 
 function Users() {
-  const { data, loading } = useQuery(GET_USERS)
+  const { data, loading, subscribeToMore } = useQuery(GET_USERS)
   console.log('[Users] data, loading: ', data, loading);
 
   if (loading) return <p className='mt-8 px-6'>loading...</p>
@@ -13,6 +15,30 @@ function Users() {
 
   return (
     <>
+      <LatestUser
+        subscribeToNewUser={() => subscribeToMore({
+          document: SUBSCRIBE_USER,
+          updateQuery: (prev, { subscriptionData }) => {
+            console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
+            if (!subscriptionData.data) return prev;
+
+            let newUser = subscriptionData.data.user.data;
+            console.log('newUser: ', newUser);
+            // if(subscriptionData.data.user.mutation === 'CREATED' && subscriptionData.data.user.data.type === user.type) {
+            //   return Object.assign({}, prev, {
+            //     merchantList: {
+            //       ...prev.merchantList,
+            //       merchants: [newUser, ...prev.merchantList.merchants],
+            //       count: prev.merchantList.count > 0 ? prev.merchantList.count + 1 : 1
+            //     }
+            //   })
+            // } else {
+            //   return prev
+            // }
+          }
+        })}
+      />
+
       {/* Projects table (small breakpoint and up) */}
       <div className="mt-8 hidden sm:block">
         <div className="inline-block min-w-full border-b border-gray-200 align-middle">

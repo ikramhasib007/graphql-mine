@@ -12,7 +12,7 @@ const nextConfig = {
     API_PORT: process.env.API_PORT,
 
     BASE_PATH: process.env.BASE_URL,
-    API_PATH: process.env.API_URL,
+    API_URI: process.env.API_URL,
     STATIC_PATH: process.env.STATIC_URL,
     SUBSCRIPTION_PATH: process.env.SUBSCRIPTION_URL,
     EMAIL_FROM: process.env.EMAIL_FROM,

@@ -4,7 +4,6 @@ import { GraphQLResolveInfo } from "graphql";
 import type { GraphQLContext } from "../../context";
 import type { User } from "@prisma/client";
 import { PrismaError } from "prisma-error-enum";
-import type { UserSubscriptionPayload } from "../Subscription";
 
 interface CreateUserData {
   data: {
@@ -18,12 +17,12 @@ const Mutation = {
   async createUser(
     parent: unknown,
     args: CreateUserData,
-    context: GraphQLContext,
+    { prisma, pubSub }: GraphQLContext,
     info: GraphQLResolveInfo
   ) {
     try {
       const select = new PrismaSelect(info).value;
-      const user: User = await context.prisma.user.create({
+      const user: User = await prisma.user.create({
         data: {
           name: args.data.name,
           email: args.data.email,
@@ -36,7 +35,7 @@ const Mutation = {
         ...select,
       });
 
-      context.pubSub.publish("user", {
+      pubSub.publish("user", {
         user: {
           mutation: "CREATED",
           data: user,

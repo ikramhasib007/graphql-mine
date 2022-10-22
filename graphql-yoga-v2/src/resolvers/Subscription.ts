@@ -1,4 +1,4 @@
-import { DefaultArgs } from "@graphql-yoga/node";
+import { DefaultArgs, pipe, filter } from "@graphql-yoga/node";
 import type { User } from "@prisma/client";
 import { GraphQLResolveInfo } from "graphql";
 import { GraphQLContext } from "../context";
@@ -17,12 +17,16 @@ const Subscription = {
       args: DefaultArgs,
       context: GraphQLContext,
       info: GraphQLResolveInfo
-    ) => {
-      return context.pubSub.subscribe("user");
-    },
-    resolve: (payload: UserSubscriptionPayload) => {
-      console.log("payload: ", payload);
-      return payload;
+    ) =>
+      pipe(
+        context.pubSub.subscribe("user"),
+        filter((payload: any) => {
+          console.log("payload: ", payload);
+          return payload;
+        })
+      ),
+    resolve: ({ user }: UserSubscriptionPayload) => {
+      return user;
     },
   },
 };
