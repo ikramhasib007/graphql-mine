@@ -4,6 +4,7 @@ import { GraphQLResolveInfo } from "graphql";
 import type { GraphQLContext } from "../../context";
 import type { User } from "@prisma/client";
 import { PrismaError } from "prisma-error-enum";
+import Upload from "./upload";
 
 interface CreateUserData {
   data: {
@@ -14,6 +15,8 @@ interface CreateUserData {
 }
 
 const Mutation = {
+  ...Upload,
+
   async createUser(
     parent: unknown,
     args: CreateUserData,

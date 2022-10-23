@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { USER_FIELDS } from './fragment'
+import { USER_FIELDS } from './fragments'
 
 export const SUBSCRIBE_USER = gql`
   ${USER_FIELDS}

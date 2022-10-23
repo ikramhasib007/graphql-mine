@@ -47,7 +47,6 @@ model File {
   path     String
   filename String
   mimetype String
-  encoding String
   userId   String? @unique
   user     User?   @relation(fields: [userId], references: [id])
   postId   String?

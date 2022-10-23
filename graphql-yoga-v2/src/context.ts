@@ -12,7 +12,7 @@ export interface GraphQLContext {
   request: Request;
   prisma: PrismaClient;
   pubSub: PubSub<{
-    user: [UserSubscriptionPayload];
+    user: [user: UserSubscriptionPayload];
   }>;
 }
 
