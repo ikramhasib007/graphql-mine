@@ -1,9 +1,13 @@
 import 'cross-fetch'
+import getConfig from 'next/config'
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client'
 import { onError } from "@apollo/client/link/error";
-import { ApolloLink, from } from '@apollo/client/core';
-import getConfig from 'next/config'
+import { ApolloLink } from '@apollo/client/core';
+import { from, split } from '@apollo/client/link/core'
+import { getMainDefinition } from '@apollo/client/utilities';
+import { ServerSentEventsLink } from '@graphql-sse/apollo-client'
+
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -49,7 +53,23 @@ const activityMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 })
 
+const sseLink = new ServerSentEventsLink({
+  graphQlSubscriptionUrl: publicRuntimeConfig.API_URI
+})
+
+const splitLink = token => process.browser ? split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  sseLink,
+  httpLink(token)
+) : httpLink(token)
+
 export default (token) => new ApolloClient({
   cache: new InMemoryCache(),
-  link: from([errorLink, authMiddleware, activityMiddleware, httpLink(token)]),
+  link: from([errorLink, authMiddleware, activityMiddleware, splitLink(token)]),
 })

@@ -19,22 +19,17 @@ function Users() {
         subscribeToNewUser={() => subscribeToMore({
           document: SUBSCRIBE_USER,
           updateQuery: (prev, { subscriptionData }) => {
-            console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
+            // console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
             if (!subscriptionData.data) return prev;
 
             let newUser = subscriptionData.data.user.data;
-            console.log('newUser: ', newUser);
-            // if(subscriptionData.data.user.mutation === 'CREATED' && subscriptionData.data.user.data.type === user.type) {
-            //   return Object.assign({}, prev, {
-            //     merchantList: {
-            //       ...prev.merchantList,
-            //       merchants: [newUser, ...prev.merchantList.merchants],
-            //       count: prev.merchantList.count > 0 ? prev.merchantList.count + 1 : 1
-            //     }
-            //   })
-            // } else {
-            //   return prev
-            // }
+            if (subscriptionData.data.user.mutation === 'CREATED') {
+              return Object.assign({}, prev, {
+                users: [newUser, ...prev.users]
+              })
+            } else {
+              return prev
+            }
           }
         })}
       />

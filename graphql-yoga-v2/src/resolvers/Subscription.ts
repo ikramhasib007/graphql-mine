@@ -1,4 +1,4 @@
-import { DefaultArgs, pipe, filter } from "@graphql-yoga/node";
+import { DefaultArgs, pipe, filter, Repeater } from "@graphql-yoga/node";
 import type { User } from "@prisma/client";
 import { GraphQLResolveInfo } from "graphql";
 import { GraphQLContext } from "../context";
@@ -12,6 +12,7 @@ export interface UserSubscriptionPayload {
 
 const Subscription = {
   user: {
+    // Merge initial value with source streams of new values
     subscribe: (
       parent: unknown,
       args: DefaultArgs,
@@ -19,15 +20,11 @@ const Subscription = {
       info: GraphQLResolveInfo
     ) =>
       pipe(
-        context.pubSub.subscribe("user"),
-        filter((payload: any) => {
-          console.log("payload: ", payload);
-          return payload;
-        })
+        Repeater.merge([undefined, context.pubSub.subscribe("user")]),
+        // map all stream values to the latest user
+        filter((payload: any) => payload)
       ),
-    resolve: ({ user }: UserSubscriptionPayload) => {
-      return user;
-    },
+    resolve: ({ user }: UserSubscriptionPayload) => user,
   },
 };
 

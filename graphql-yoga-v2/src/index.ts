@@ -22,6 +22,7 @@ const server = createServer({
     typeDefs,
     resolvers,
   },
+  graphiql: process.env.NODE_ENV === "development",
   context: createContext,
   multipart: {
     // Maximum allowed file size (in bytes)

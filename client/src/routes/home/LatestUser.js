@@ -5,7 +5,6 @@ function LatestUser({
 }) {
 
   useEffect(() => {
-    console.log('useEffect: ');
     subscribeToNewUser()
   }, [subscribeToNewUser])
 
