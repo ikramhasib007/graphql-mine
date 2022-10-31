@@ -1,25 +1,13 @@
 import { PrismaClient } from "@prisma/client";
-import { createPubSub } from "@graphql-yoga/node";
-import type { PubSub } from "@graphql-yoga/node";
-import prisma from "./prisma";
-import type { UserSubscriptionPayload } from "./resolvers/Subscription";
+import { createPubSub, YogaInitialContext } from "@graphql-yoga/node";
+import { UserSubscriptionPayload } from "./resolvers/Subscription";
 
-const pubSub = createPubSub<{
+export const pubSub = createPubSub<{
   user: [user: UserSubscriptionPayload];
+  "globalCounter:changed": [];
 }>();
 
-export interface GraphQLContext {
-  request: Request;
+export default interface Context extends YogaInitialContext {
   prisma: PrismaClient;
-  pubSub: PubSub<{
-    user: [user: UserSubscriptionPayload];
-  }>;
-}
-
-export function createContext(request: Request): GraphQLContext {
-  return {
-    request,
-    prisma,
-    pubSub,
-  };
+  pubSub: typeof pubSub;
 }

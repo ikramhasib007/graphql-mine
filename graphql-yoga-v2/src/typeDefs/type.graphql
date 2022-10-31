@@ -8,7 +8,7 @@ type User {
   name: String
   photo: File
   profile: Profile
-  posts: [Post!]!
+  posts: [Post!]
   createdAt: Date!
   updatedAt: Date!
 }

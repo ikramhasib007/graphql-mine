@@ -7,6 +7,7 @@ type Mutation {
   uploadFiles (files: [Upload!]!): [File!]!
   deleteFile (file: DeleteFileInput!): File!
   deleteFiles (files: [DeleteFileInput!]!): Int!
+  incrementGlobalCounter: Int!
 }
 
 input CreateUserInput {

@@ -1,21 +1,9 @@
-import { DefaultArgs, GraphQLYogaError } from "@graphql-yoga/node";
-import { GraphQLResolveInfo } from "graphql";
-import { GraphQLContext } from "../../context";
-import type { Post } from "@prisma/client";
-import type { User } from "@prisma/client";
+import { GraphQLYogaError } from "@graphql-yoga/node";
 import { PrismaSelect } from "@paljs/plugins";
+import { QueryResolvers } from "src/generated/graphql";
 
-interface IdParamsArgs {
-  id: string;
-}
-
-const Query = {
-  users: async (
-    parent: User[],
-    args: DefaultArgs,
-    context: GraphQLContext,
-    info: GraphQLResolveInfo
-  ) => {
+const Query: QueryResolvers = {
+  users: async (parent, args, context, info) => {
     try {
       const select = new PrismaSelect(info).value;
       const users = await context.prisma.user.findMany({ ...select });
@@ -24,33 +12,18 @@ const Query = {
       throw new GraphQLYogaError(error);
     }
   },
-  user: (
-    parent: User,
-    args: IdParamsArgs,
-    context: GraphQLContext,
-    info: GraphQLResolveInfo
-  ) => {
+  user: (parent, args, context, info) => {
     const select = new PrismaSelect(info).value;
     return context.prisma.user.findFirstOrThrow({
       where: { id: args.id },
       ...select,
     });
   },
-  posts: (
-    parent: Post[],
-    args: DefaultArgs,
-    context: GraphQLContext,
-    info: GraphQLResolveInfo
-  ) => {
+  posts: (parent, args, context, info) => {
     const select = new PrismaSelect(info).value;
     return context.prisma.user.findMany({ ...select });
   },
-  post: (
-    parent: Post,
-    args: IdParamsArgs,
-    context: GraphQLContext,
-    info: GraphQLResolveInfo
-  ) => {
+  post: (parent, args, context, info) => {
     const select = new PrismaSelect(info).value;
     return context.prisma.user.findFirstOrThrow({
       where: { id: args.id },

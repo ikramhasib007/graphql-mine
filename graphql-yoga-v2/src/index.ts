@@ -1,17 +1,16 @@
+import { useExtendContext } from "@envelop/core";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { createServer } from "@graphql-yoga/node";
-import { createContext } from "./context";
+import Context, { pubSub } from "./context";
 import { resolvers } from "./resolvers";
+import prisma from "./prisma";
 
 const typeDefs = loadSchemaSync("./**/*.graphql", {
   loaders: [new GraphQLFileLoader()],
 });
 
-const port = 4000;
-
-const server = createServer({
-  port,
+const server = createServer<Context, any>({
   cors: {
     origin: ["http://localhost:3000"],
     credentials: true,
@@ -22,8 +21,8 @@ const server = createServer({
     typeDefs,
     resolvers,
   },
+  plugins: [useExtendContext(() => ({ pubSub, prisma }))],
   graphiql: process.env.NODE_ENV === "development",
-  context: createContext,
   multipart: {
     // Maximum allowed file size (in bytes)
     fileSize: 1048576, // unit bytes // size 1M

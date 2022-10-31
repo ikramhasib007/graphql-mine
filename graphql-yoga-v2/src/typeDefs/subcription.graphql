@@ -1,5 +1,6 @@
 type Subscription {
-  user: UserSubscriptionPayload
+  user: UserSubscriptionPayload!
+  globalCounter: Int!
 }
 
 type UserSubscriptionPayload {
