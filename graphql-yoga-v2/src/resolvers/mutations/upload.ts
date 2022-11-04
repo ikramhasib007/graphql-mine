@@ -166,25 +166,25 @@ const FileUpload: MutationResolvers = {
     }
   },
 
-  // async uploadFiles(
-  //   parent,
-  //   args: { files: [File] },
-  //   { prisma }: Context,
-  //   info
-  // ) {
-  //   try {
-  //     // const userId = getUserId(request, false)
+  async uploadFiles(
+    parent,
+    args: { files: File[] },
+    { prisma }: Context,
+    info
+  ) {
+    try {
+      // const userId = getUserId(request, false)
 
-  //     const processUpload = async (file: File) => {
-  //       const { id, filename, mimetype, path } = await writeFileStreaming(file);
-  //       return prisma.file.create({ data: { id, filename, mimetype, path } });
-  //     };
+      const processUpload = async (file: File) => {
+        const { id, filename, mimetype, path } = await writeFileStreaming(file);
+        return prisma.file.create({ data: { id, filename, mimetype, path } });
+      };
 
-  //     return Promise.all(args.files.map(processUpload));
-  //   } catch (error: any) {
-  //     throw new GraphQLYogaError(error);
-  //   }
-  // },
+      return Promise.all(args.files.map(processUpload));
+    } catch (error: any) {
+      throw new GraphQLYogaError(error);
+    }
+  },
 
   async deleteFile(parent, args, { prisma }: Context, info) {
     try {
@@ -199,36 +199,36 @@ const FileUpload: MutationResolvers = {
     }
   },
 
-  // async deleteFiles(parent, args, { prisma }: Context, info) {
-  //   try {
-  //     // const userId = getUserId(request, false)
-  //     // Ensure upload directory exists
-  //     mkdirp.sync(uploadDir);
+  async deleteFiles(parent, args, { prisma }: Context, info) {
+    try {
+      // const userId = getUserId(request, false)
+      // Ensure upload directory exists
+      mkdirp.sync(uploadDir);
 
-  //     await deleteAllFiles(args.files);
-  //     let ids = args.files.map((file: any) => file.id);
-  //     let filenames = args.files.map((file: any) => file.filename);
+      await deleteAllFiles(args.files);
+      let ids = args.files.map((file: any) => file.id);
+      let filenames = args.files.map((file: any) => file.filename);
 
-  //     return prisma.file.deleteMany({
-  //       where: {
-  //         AND: [
-  //           {
-  //             id: {
-  //               in: ids,
-  //             },
-  //           },
-  //           {
-  //             filename: {
-  //               in: filenames,
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     });
-  //   } catch (error: any) {
-  //     throw new GraphQLYogaError(error);
-  //   }
-  // },
+      return prisma.file.deleteMany({
+        where: {
+          AND: [
+            {
+              id: {
+                in: ids,
+              },
+            },
+            {
+              filename: {
+                in: filenames,
+              },
+            },
+          ],
+        },
+      });
+    } catch (error: any) {
+      throw new GraphQLYogaError(error);
+    }
+  },
 };
 
 export default FileUpload;
