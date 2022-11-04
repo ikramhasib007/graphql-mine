@@ -22,8 +22,10 @@ function UploadFile({
     if (validity.valid) {
       if (error) setError();
       mutate({ variables: { file } }).then(({ data, errors }) => {
-        setFile(data.uploadFile);
-        if (getData) getData(data.uploadFile)
+        if (!errors) {
+          setFile(data.uploadFile);
+          if (getData) getData(data.uploadFile)
+        }
       }).catch(e => {
         setError(e)
       })

@@ -21,6 +21,7 @@ const server = createServer<Context, any>({
     typeDefs,
     resolvers,
   },
+  logging: true,
   plugins: [useExtendContext(() => ({ pubSub, prisma }))],
   graphiql: process.env.NODE_ENV === "development",
   multipart: {

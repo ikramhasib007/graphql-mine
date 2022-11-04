@@ -152,12 +152,12 @@ const FileUpload: MutationResolvers = {
   ) {
     try {
       // const userId = getUserId(request, false)
-      try {
-        const success = await uploadToSpaces(file);
-        console.log("success: ", success);
-      } catch (error: any) {
-        console.log("Spaces error: ", error);
-      }
+      // try {
+      //   const success = await uploadToSpaces(file);
+      //   console.log("success: ", success);
+      // } catch (error: any) {
+      //   console.log("Spaces error: ", error);
+      // }
 
       const { id, filename, mimetype, path } = await writeFileStreaming(file);
       return prisma.file.create({ data: { id, filename, mimetype, path } });
