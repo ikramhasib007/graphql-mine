@@ -5,6 +5,7 @@ import getConfig from 'next/config'
 import Image from 'next/image'
 import { DELETE_FILE, UPLOAD_FILES } from '../../operations/upload'
 import { allowedImageType, classNames, imageProps } from '../../utils'
+import Spinner from '../loaders/spinner'
 
 const { publicRuntimeConfig } = getConfig()
 
