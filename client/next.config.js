@@ -22,6 +22,7 @@ const nextConfig = {
       'tailwindui.com',
       'images.unsplash.com',
       'localhost',
+      "static.flipperstore.com",
     ],
   }
 }

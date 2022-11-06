@@ -32,6 +32,7 @@ export type CreateUserInput = {
 export type DeleteFileInput = {
   filename: Scalars['String'];
   id: Scalars['String'];
+  path: Scalars['String'];
 };
 
 export type File = {

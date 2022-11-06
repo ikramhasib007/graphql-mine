@@ -39,6 +39,7 @@ CREATE TABLE "File" (
     "path" TEXT NOT NULL,
     "filename" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
+    "encoding" TEXT NOT NULL,
     "userId" TEXT,
     "postId" TEXT,
 

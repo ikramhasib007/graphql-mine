@@ -5,6 +5,7 @@ import getConfig from 'next/config'
 import Image from 'next/image'
 import { DELETE_FILE, UPLOAD_FILE } from '../../operations/upload'
 import { allowedImageType, classNames, imageProps } from '../../utils'
+import Spinner from '../loaders/spinner'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -12,8 +13,8 @@ function UploadFile({
   label, labelClassName, inputName, getData, optional, data = {}
 }) {
   const [file, setFile] = useState(data)
-  const [mutate] = useMutation(UPLOAD_FILE)
-  const [deleteFile] = useMutation(DELETE_FILE)
+  const [mutate, { loading }] = useMutation(UPLOAD_FILE)
+  const [deleteFile, { loading: deleteLoading }] = useMutation(DELETE_FILE)
   const [error, setError] = useState()
 
   function onChange({ target: { validity, files: [file] } }) {
@@ -32,10 +33,13 @@ function UploadFile({
     }
   }
 
-  function handleRemove({ id, filename }) {
-    deleteFile({ variables: { id, filename } }).then(() => {
-      setFile({});
-      if (getData) getData({})
+  function handleRemove({ id, filename, path }) {
+    deleteFile({ variables: { id, filename, path } }).then(({ errors }) => {
+      if (!errors) {
+        setFile({});
+        if (getData) getData({})
+        document.querySelector(`input[type=file][id=${inputName}]`).value = ''
+      }
     }).catch(e => {
       setError(e)
     })
@@ -79,6 +83,7 @@ function UploadFile({
               onClick={() => handleRemove(file)}
               className="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 flex-shrink-0 h-4.5 w-4.5 rounded-full inline-flex items-center justify-center text-neutral-400 bg-neutral-50 hover:bg-neutral-300 hover:text-neutral-500 focus:outline-none focus:bg-neutral-500 focus:text-white"
             >
+              {deleteLoading && <div className='absolute inset-0 flex justify-center items-center cursor-wait'><Spinner small /></div>}
               <span className="sr-only">Remove Image</span>
               <svg className="h-2.5 w-2.5" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                 <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
@@ -105,9 +110,15 @@ function UploadFile({
           <div className="flex text-sm text-gray-600 justify-center pt-2">
             <label
               htmlFor={inputName}
-              className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+              className={classNames(
+                "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
+                loading ? "pointer-events-none" : ""
+              )}
             >
               <span>Upload a photo</span>
+              {loading && <div className="absolute inset-0 animate-pulse-1s">
+                <div className="h-full w-full bg-slate-200 rounded-full" />
+              </div>}
               <input data-testid={inputName} id={inputName} name={inputName} onChange={onChange} type="file" className="sr-only" />
             </label>
             <p className="pl-1">or drag and drop</p>

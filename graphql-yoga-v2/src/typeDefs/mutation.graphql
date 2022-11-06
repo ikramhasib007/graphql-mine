@@ -20,6 +20,7 @@ input CreateUserInput {
 input DeleteFileInput {
   id: String!
   filename: String!
+  path: String!
 }
 
 type BatchPayload {

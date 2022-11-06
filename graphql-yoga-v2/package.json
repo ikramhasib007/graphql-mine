@@ -33,13 +33,14 @@
     "@paljs/plugins": "^4.1.0",
     "@prisma/client": "^4.5.0",
     "cuid": "^2.1.8",
-    "formidable": "^2.0.1",
+    "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "mime-types": "^2.1.35",
     "mkdirp": "^1.0.4",
     "prisma-error-enum": "^0.1.3"
   },
   "devDependencies": {
+    "@aws-sdk/abort-controller": "^3.201.0",
     "@faker-js/faker": "^7.6.0",
     "@graphql-codegen/cli": "^2.13.7",
     "@graphql-codegen/typescript": "^2.8.0",

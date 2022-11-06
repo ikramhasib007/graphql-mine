@@ -20,10 +20,12 @@ const writeFileStreaming = async (file: File) => {
     const path = `${uploadDir}/${id}-${filename}`;
     await fs.writeFile(nodePath.join(process.cwd(), path), fileStream);
     const mimetype: any = mime.lookup(path) ?? "";
+    const encoding: any = mime.charset(path) ?? "";
     return {
       id,
       filename,
       mimetype,
+      encoding,
       path: path.substr(2),
     };
   } catch (error: any) {
@@ -67,8 +69,11 @@ const FileUpload: MutationResolvers = {
   ) {
     try {
       // const userId = getUserId(request, false)
-      const { id, filename, mimetype, path } = await writeFileStreaming(file);
-      return prisma.file.create({ data: { id, filename, mimetype, path } });
+      const { id, filename, mimetype, encoding, path } =
+        await writeFileStreaming(file);
+      return prisma.file.create({
+        data: { id, filename, mimetype, encoding, path },
+      });
     } catch (error: any) {
       throw new GraphQLYogaError(error);
     }
@@ -83,8 +88,11 @@ const FileUpload: MutationResolvers = {
     try {
       // const userId = getUserId(request, false)
       const processUpload = async (file: File) => {
-        const { id, filename, mimetype, path } = await writeFileStreaming(file);
-        return prisma.file.create({ data: { id, filename, mimetype, path } });
+        const { id, filename, mimetype, encoding, path } =
+          await writeFileStreaming(file);
+        return prisma.file.create({
+          data: { id, filename, mimetype, encoding, path },
+        });
       };
       return Promise.all(args.files.map(processUpload));
     } catch (error: any) {

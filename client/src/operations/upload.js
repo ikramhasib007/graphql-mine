@@ -26,10 +26,12 @@ export const DELETE_FILE = gql`
   mutation DeleteFile(
     $id: String!
     $filename: String!
+    $path: String!
     ) {
     deleteFile(file: {
       id: $id,
       filename: $filename
+      path: $path
     }) {
       ...FileFields
     }
