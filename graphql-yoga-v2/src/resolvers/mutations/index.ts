@@ -1,6 +1,5 @@
-import { DefaultArgs, GraphQLYogaError } from "@graphql-yoga/node";
+import { GraphQLYogaError } from "@graphql-yoga/node";
 import { PrismaSelect } from "@paljs/plugins";
-import { GraphQLResolveInfo } from "graphql";
 import type { User } from "@prisma/client";
 import { PrismaError } from "prisma-error-enum";
 import Upload from "./upload";
@@ -49,11 +48,15 @@ const Mutation: MutationResolvers = {
     }
   },
 
-  incrementGlobalCounter(parent, args, context, info) {
-    globalCounter = globalCounter + 1;
-    // publish a global counter increment event
-    context.pubSub.publish("globalCounter:changed");
-    return globalCounter;
+  incrementGlobalCounter(parent, args, { pubSub }: Context, info) {
+    try {
+      globalCounter = globalCounter + 1;
+      // publish a global counter increment event
+      pubSub.publish("globalCounter:changed");
+      return globalCounter;
+    } catch (error: any) {
+      throw new GraphQLYogaError(error);
+    }
   },
 };
 

@@ -1,12 +1,20 @@
+import { useSubscription } from '@apollo/client'
 import { useEffect } from 'react'
+import { SUBSCRIBE_USER } from '../../operations/subscription'
 
 function LatestUser({
   subscribeToNewUser
 }) {
+  const { data, loading } = useSubscription(SUBSCRIBE_USER)
+  console.log('[SUBSCRIBE_USER] data, loading: ', data, loading);
 
-  useEffect(() => {
-    subscribeToNewUser()
-  }, [subscribeToNewUser])
+
+  // useEffect(() => {
+  //   subscribeToNewUser()
+  // }, [subscribeToNewUser])
+
+  if (!data) return null;
+  console.log('data: ', data);
 
   return (
     <>

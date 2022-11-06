@@ -1,12 +1,10 @@
 import { useQuery } from '@apollo/client'
-import React from 'react'
 import { classNames } from '../../layout'
-import { SUBSCRIBE_USER } from '../../operations/subscription'
 import { GET_USERS } from '../../operations/user'
 import LatestUser from './LatestUser'
 
 function Users() {
-  const { data, loading, subscribeToMore } = useQuery(GET_USERS)
+  const { data, loading } = useQuery(GET_USERS)
   console.log('[Users] data, loading: ', data, loading);
 
   if (loading) return <p className='mt-8 px-6'>loading...</p>
@@ -16,22 +14,22 @@ function Users() {
   return (
     <>
       <LatestUser
-        subscribeToNewUser={() => subscribeToMore({
-          document: SUBSCRIBE_USER,
-          updateQuery: (prev, { subscriptionData }) => {
-            // console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
-            if (!subscriptionData.data) return prev;
+      // subscribeToNewUser={() => subscribeToMore({
+      //   document: SUBSCRIBE_USER,
+      //   updateQuery: (prev, { subscriptionData }) => {
+      //     // console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
+      //     if (!subscriptionData.data) return prev;
 
-            let newUser = subscriptionData.data.user.data;
-            if (subscriptionData.data.user.mutation === 'CREATED') {
-              return Object.assign({}, prev, {
-                users: [newUser, ...prev.users]
-              })
-            } else {
-              return prev
-            }
-          }
-        })}
+      //     let newUser = subscriptionData.data.user.data;
+      //     if (subscriptionData.data.user.mutation === 'CREATED') {
+      //       return Object.assign({}, prev, {
+      //         users: [newUser, ...prev.users]
+      //       })
+      //     } else {
+      //       return prev
+      //     }
+      //   }
+      // })}
       />
 
       {/* Projects table (small breakpoint and up) */}

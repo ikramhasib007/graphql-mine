@@ -1,6 +1,6 @@
-import { DefaultArgs, pipe, filter, Repeater } from "@graphql-yoga/node";
+import { pipe, filter, Repeater } from "@graphql-yoga/node";
 import type { User } from "@prisma/client";
-import { GraphQLResolveInfo } from "graphql";
+import Context from "src/context";
 import { SubscriptionResolvers } from "src/generated/graphql";
 
 export interface UserSubscriptionPayload {
@@ -13,9 +13,9 @@ export interface UserSubscriptionPayload {
 const Subscription: SubscriptionResolvers = {
   user: {
     // Merge initial value with source streams of new values
-    subscribe: (parent, args, context, info) =>
+    subscribe: (parent, args, { pubSub }: Context, info) =>
       pipe(
-        Repeater.merge([undefined, context.pubSub.subscribe("user")]),
+        Repeater.merge([undefined, pubSub.subscribe("user")]),
         // map all stream values to the latest user
         filter((payload: any) => payload)
       ),
@@ -24,7 +24,7 @@ const Subscription: SubscriptionResolvers = {
 
   globalCounter: {
     // Merge initial value with source stream of new values
-    subscribe: (parent, args, context, info) =>
+    subscribe: (parent, args, { pubSub }: Context, info) =>
       pipe(
         Repeater.merge([
           // cause an initial event so the
@@ -32,7 +32,7 @@ const Subscription: SubscriptionResolvers = {
           // upon initiating the subscription
           undefined,
           // event stream for future updates
-          context.pubSub.subscribe("globalCounter:change"),
+          pubSub.subscribe("globalCounter:changed"),
         ])
         // map all stream values to the latest globalCounter
         // map((item: any) => globalCounter)
