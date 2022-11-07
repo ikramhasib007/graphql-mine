@@ -2,6 +2,7 @@ scalar Upload
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
+  login(data: LoginUserInput!): AuthPayload!
 
   uploadFile (file: Upload!): File!
   uploadFiles (files: [Upload!]!): [File!]!
@@ -13,8 +14,14 @@ type Mutation {
 input CreateUserInput {
   name: String!
   email: String!
+  password: String
   bio: String
   photoId: String
+}
+
+input LoginUserInput {
+  email: String!
+  password: String
 }
 
 input DeleteFileInput {

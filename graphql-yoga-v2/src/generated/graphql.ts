@@ -17,6 +17,12 @@ export type Scalars = {
   Upload: any;
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Scalars['String'];
+  user: User;
+};
+
 export type BatchPayload = {
   __typename?: 'BatchPayload';
   count?: Maybe<Scalars['Int']>;
@@ -26,6 +32,7 @@ export type CreateUserInput = {
   bio?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   name: Scalars['String'];
+  password?: InputMaybe<Scalars['String']>;
   photoId?: InputMaybe<Scalars['String']>;
 };
 
@@ -45,12 +52,18 @@ export type File = {
   user?: Maybe<User>;
 };
 
+export type LoginUserInput = {
+  email: Scalars['String'];
+  password?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   deleteFile: File;
   deleteFiles: BatchPayload;
   incrementGlobalCounter: Scalars['Int'];
+  login: AuthPayload;
   uploadFile: File;
   uploadFiles: Array<File>;
 };
@@ -68,6 +81,11 @@ export type MutationDeleteFileArgs = {
 
 export type MutationDeleteFilesArgs = {
   files: Array<DeleteFileInput>;
+};
+
+
+export type MutationLoginArgs = {
+  data: LoginUserInput;
 };
 
 
@@ -218,6 +236,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
   BatchPayload: ResolverTypeWrapper<BatchPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateUserInput: CreateUserInput;
@@ -227,6 +246,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Json: ResolverTypeWrapper<Scalars['Json']>;
+  LoginUserInput: LoginUserInput;
   Mutation: ResolverTypeWrapper<{}>;
   MutationType: MutationType;
   Post: ResolverTypeWrapper<Post>;
@@ -241,6 +261,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuthPayload: AuthPayload;
   BatchPayload: BatchPayload;
   Boolean: Scalars['Boolean'];
   CreateUserInput: CreateUserInput;
@@ -250,6 +271,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Json: Scalars['Json'];
+  LoginUserInput: LoginUserInput;
   Mutation: {};
   Post: Post;
   Profile: Profile;
@@ -259,6 +281,12 @@ export type ResolversParentTypes = {
   Upload: Scalars['Upload'];
   User: User;
   UserSubscriptionPayload: UserSubscriptionPayload;
+};
+
+export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type BatchPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['BatchPayload'] = ResolversParentTypes['BatchPayload']> = {
@@ -289,6 +317,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationDeleteFileArgs, 'file'>>;
   deleteFiles?: Resolver<ResolversTypes['BatchPayload'], ParentType, ContextType, RequireFields<MutationDeleteFilesArgs, 'files'>>;
   incrementGlobalCounter?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'data'>>;
   uploadFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'file'>>;
   uploadFiles?: Resolver<Array<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUploadFilesArgs, 'files'>>;
 };
@@ -349,6 +378,7 @@ export type UserSubscriptionPayloadResolvers<ContextType = any, ParentType exten
 };
 
 export type Resolvers<ContextType = any> = {
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   BatchPayload?: BatchPayloadResolvers<ContextType>;
   Date?: GraphQLScalarType;
   File?: FileResolvers<ContextType>;

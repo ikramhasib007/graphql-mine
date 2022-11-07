@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const { faker } = require("@faker-js/faker");
 const prisma = new PrismaClient();
@@ -7,17 +8,20 @@ async function main() {
     data: [
       {
         name: faker.name.fullName(),
-        email: faker.internet.email(),
+        email: "ikramhasib007@gmail.com",
+        password: bcrypt.hashSync("12345678", 10),
       },
       {
         name: faker.name.fullName(),
         email: faker.internet.email(),
+        password: bcrypt.hashSync("12345678", 10),
       },
       {
         name: faker.name.fullName(),
         email: faker.internet.email(),
+        password: bcrypt.hashSync("12345678", 10),
       },
-    ]
+    ],
   });
 
   console.log({ users });

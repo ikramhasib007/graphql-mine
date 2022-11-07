@@ -8,6 +8,8 @@ import { CREATE_USER } from '../../operations/user';
 const schema = yup.object().shape({
   name: yup.string().label('Name').required(),
   email: yup.string().email().label('Email').required(),
+  password: yup.string().label('Password').min(8).required(),
+  repeatPassword: yup.string().oneOf([yup.ref('password'), null], 'Password does not match'),
   bio: yup.string().label('Bio').optional(),
 })
 
@@ -17,6 +19,8 @@ function UserCreate({ dismiss }) {
     defaultValues: {
       name: '',
       email: '',
+      password: '',
+      repeatPassword: '',
       bio: ''
     }
   })
@@ -26,8 +30,9 @@ function UserCreate({ dismiss }) {
   })
 
   function onSubmit(data) {
+    const { name, email, password, bio } = data
     mutate({
-      variables: { data }
+      variables: { data: { name, email, password, bio } }
     }).then(() => {
       dismiss()
     }).catch((e) => {
@@ -76,6 +81,38 @@ function UserCreate({ dismiss }) {
                   className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
                 />
                 {errors.email && <p className="mt-0.5 text-sm text-danger-600">{errors.email?.message}</p>}
+              </div>
+            </div>
+
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                Password
+              </label>
+              <div className="mt-1 sm:col-span-2 sm:mt-0">
+                <input
+                  type="password"
+                  {...register('password')}
+                  id="password"
+                  autoComplete="current-password"
+                  className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+                />
+                {errors.password && <p className="mt-0.5 text-sm text-danger-600">{errors.password?.message}</p>}
+              </div>
+            </div>
+
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+              <label htmlFor="repeatPassword" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                Repeat Password
+              </label>
+              <div className="mt-1 sm:col-span-2 sm:mt-0">
+                <input
+                  type="password"
+                  {...register('repeatPassword')}
+                  id="repeatPassword"
+                  autoComplete="repeatPassword"
+                  className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+                />
+                {errors.repeatPassword && <p className="mt-0.5 text-sm text-danger-600">{errors.repeatPassword?.message}</p>}
               </div>
             </div>
 

@@ -1,11 +1,12 @@
-import { pipe, filter, Repeater } from "@graphql-yoga/node";
+import { pipe, filter, Repeater, GraphQLYogaError } from "@graphql-yoga/node";
 import type { User } from "@prisma/client";
 import Context from "src/context";
-import { SubscriptionResolvers } from "src/generated/graphql";
+import { MutationType, SubscriptionResolvers } from "src/generated/graphql";
+import getUserId from "src/utils/getUserId";
 
 export interface UserSubscriptionPayload {
   user: {
-    mutation: string;
+    mutation: MutationType;
     data: User;
   };
 }
@@ -13,13 +14,19 @@ export interface UserSubscriptionPayload {
 const Subscription: SubscriptionResolvers = {
   user: {
     // Merge initial value with source streams of new values
-    subscribe: (parent, args, { pubSub }: Context, info) =>
-      pipe(
-        Repeater.merge([undefined, pubSub.subscribe("user")]),
-        // map all stream values to the latest user
-        filter((payload: any) => payload)
-      ),
-    resolve: (payload: any) => payload,
+    subscribe: (parent, args, { pubSub, request }: Context, info) => {
+      try {
+        const userId = getUserId(request, false);
+        return pipe(
+          Repeater.merge([undefined, pubSub.subscribe("user")]),
+          // map all stream values to the latest user
+          filter((payload: any) => payload)
+        );
+      } catch (error: any) {
+        throw new GraphQLYogaError(error);
+      }
+    },
+    resolve: ({ user }: UserSubscriptionPayload) => user,
   },
 
   globalCounter: {

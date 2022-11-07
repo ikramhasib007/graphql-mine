@@ -39,3 +39,8 @@ type File {
   user: User
   post: Post
 }
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
