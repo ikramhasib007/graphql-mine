@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const { faker } = require("@faker-js/faker");

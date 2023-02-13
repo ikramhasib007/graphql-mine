@@ -1,5 +1,5 @@
 import { GraphQLYogaError } from "@graphql-yoga/node";
-import cuid from "cuid";
+import { createId } from "@paralleldrive/cuid2";
 import { s3Client } from "../../s3Client";
 import { Upload } from "@aws-sdk/lib-storage";
 import Context from "src/context";
@@ -8,7 +8,7 @@ import { DeleteFileInput, MutationResolvers } from "src/generated/graphql";
 const subDirectory = "uploads";
 
 const uploadToSpaces = async (file: File) => {
-  const id = cuid();
+  const id = createId();
   const filename = file.name;
   const path = `${subDirectory}/${id}-${filename}`;
 

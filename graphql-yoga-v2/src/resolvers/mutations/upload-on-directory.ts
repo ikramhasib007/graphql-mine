@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import nodePath from "node:path";
 import * as mkdirp from "mkdirp";
 import mime from "mime-types";
-import cuid from "cuid";
+import { createId } from "@paralleldrive/cuid2";
 import Context from "src/context";
 import { MutationResolvers } from "src/generated/graphql";
 
@@ -15,7 +15,7 @@ const writeFileStreaming = async (file: File) => {
     // Ensure upload directory exists
     mkdirp.sync(uploadDir);
     const fileStream = file.stream();
-    const id = cuid();
+    const id = createId();
     const filename = file.name;
     const path = `${uploadDir}/${id}-${filename}`;
     await fs.writeFile(nodePath.join(process.cwd(), path), fileStream);
