@@ -1,0 +1,60 @@
+{
+  "name": "graphql-yoga",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register --exit-child --respawn src/index.ts",
+    "migrate": "npx prisma migrate dev",
+    "migrate:prod": "npm run db-clean && npx prisma migrate dev --create-only --name initial_migration && npm run deploy",
+    "migrate-reset": "npx prisma migrate reset",
+    "migrate-resolve": "npx prisma migrate resolve",
+    "migrate-clean": "npm run db-clean && npx prisma migrate dev --name initial_migration",
+    "generate": "npx prisma generate",
+    "deploy": "npx prisma migrate deploy",
+    "db-push": "npx prisma db push",
+    "studio-dev": "npx prisma studio",
+    "db-clean": "rimraf ./prisma/migrations",
+    "check": "tsc --pretty --noEmit",
+    "postinstall": "graphql-codegen",
+    "start": "ts-node src/index.ts",
+    "build": "rimraf ./dist && NODE_ENV=production tsc",
+    "start:prod": "npm run build && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.267.0",
+    "@aws-sdk/lib-storage": "^3.267.0",
+    "@paljs/plugins": "^5.2.0",
+    "@paralleldrive/cuid2": "^2.0.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "graphql-scalars": "^1.20.1",
+    "graphql-yoga": "^3.5.1",
+    "jsonwebtoken": "^9.0.0",
+    "prisma-error-enum": "^0.1.3"
+  },
+  "devDependencies": {
+    "@aws-sdk/abort-controller": "^3.267.0",
+    "@eddeee888/gcg-typescript-resolver-files": "^0.2.0",
+    "@faker-js/faker": "^7.6.0",
+    "@graphql-codegen/cli": "^3.0.0",
+    "@prisma/client": "^4.10.1",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/node": "^18.13.0",
+    "cross-env": "^7.0.3",
+    "prisma": "^4.10.1",
+    "rimraf": "^4.1.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.5"
+  }
+}
