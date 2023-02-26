@@ -18,11 +18,11 @@ function Users() {
         subscribeToNewUser={() => subscribeToMore({
           document: SUBSCRIBE_USER,
           updateQuery: (prev, { subscriptionData }) => {
-            // console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
+            console.log('[SUBSCRIBE_USER] subscriptionData: ', subscriptionData);
             if (!subscriptionData.data) return prev;
 
             let newUser = subscriptionData.data.user.data;
-            if (subscriptionData.data.user.mutation === 'CREATED') {
+            if (subscriptionData.data.user.mutation === 'CREATED' && !prev.users.some(item => item.id === newUser.id)) {
               return Object.assign({}, prev, {
                 users: [newUser, ...prev.users]
               })

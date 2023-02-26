@@ -25,16 +25,14 @@ function UserCreate({ dismiss }) {
     }
   })
 
-  const [mutate] = useMutation(CREATE_USER, {
-    refetchQueries: ["GetUsers"]
-  })
+  const [mutate] = useMutation(CREATE_USER)
 
   function onSubmit(data) {
     const { name, email, password, bio } = data
     mutate({
       variables: { data: { name, email, password, bio } }
-    }).then(() => {
-      dismiss()
+    }).then(({ errors }) => {
+      if (!errors) dismiss()
     }).catch((e) => {
       console.log('e: ', e);
     })
