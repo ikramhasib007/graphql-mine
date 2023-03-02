@@ -1,0 +1,35 @@
+scalar Upload
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  login(data: LoginUserInput!): AuthPayload!
+
+  uploadFile (file: Upload!): File!
+  uploadFiles (files: [Upload!]!): [File!]!
+  deleteFile (file: DeleteFileInput!): File!
+  deleteFiles (files: [DeleteFileInput!]!): BatchPayload!
+  incrementGlobalCounter: Int!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String
+  bio: String
+  photoId: String
+}
+
+input LoginUserInput {
+  email: String!
+  password: String
+}
+
+input DeleteFileInput {
+  id: String!
+  filename: String!
+  path: String!
+}
+
+type BatchPayload {
+  count: Int
+}

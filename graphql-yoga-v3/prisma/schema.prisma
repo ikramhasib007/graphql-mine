@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  password  String?
+  name      String?
+  photo     File?
+  profile   Profile?
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bio       String?
+  userId    String?  @unique @db.Uuid
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  content   String?
+  photos    File[]
+  authorId  String   @db.Uuid
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  path     String
+  filename String
+  mimetype String
+  encoding String
+  userId   String? @unique @db.Uuid
+  user     User?   @relation(fields: [userId], references: [id])
+  postId   String? @db.Uuid
+  post     Post?   @relation(fields: [postId], references: [id])
+}

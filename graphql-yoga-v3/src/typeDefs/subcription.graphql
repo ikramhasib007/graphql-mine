@@ -1,0 +1,15 @@
+type Subscription {
+  user: UserSubscriptionPayload!
+  globalCounter: Int!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  data: User!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
