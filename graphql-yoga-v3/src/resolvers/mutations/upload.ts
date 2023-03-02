@@ -2,8 +2,8 @@ import { GraphQLError } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 import { s3Client } from "../../s3Client";
 import { Upload } from "@aws-sdk/lib-storage";
-import Context from "src/context";
-import { DeleteFileInput, MutationResolvers } from "src/generated/graphql";
+import Context from "../../context";
+import { DeleteFileInput, MutationResolvers } from "../../generated/graphql";
 
 const subDirectory = "uploads";
 

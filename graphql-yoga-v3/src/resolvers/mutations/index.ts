@@ -4,10 +4,10 @@ import { PrismaSelect } from "@paljs/plugins";
 import type { User } from "@prisma/client";
 import { PrismaError } from "prisma-error-enum";
 import Upload from "./upload";
-import { MutationResolvers, MutationType } from "src/generated/graphql";
-import Context from "src/context";
-import generateToken from "src/utils/generateToken";
-import hashPassword from "src/utils/hashPassword";
+import { MutationResolvers, MutationType } from "../../generated/graphql";
+import Context from "../../context";
+import generateToken from "../../utils/generateToken";
+import hashPassword from "../../utils/hashPassword";
 
 let globalCounter = 0;
 

@@ -5,8 +5,8 @@ import nodePath from "node:path";
 import * as mkdirp from "mkdirp";
 import mime from "mime-types";
 import { v4 as uuidv4 } from "uuid";
-import Context from "src/context";
-import { MutationResolvers } from "src/generated/graphql";
+import Context from "../../context";
+import { MutationResolvers } from "../../generated/graphql";
 
 const uploadDir = "./uploads";
 

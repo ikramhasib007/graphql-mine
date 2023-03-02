@@ -1,8 +1,8 @@
 import { GraphQLError } from "graphql";
 import { PrismaSelect } from "@paljs/plugins";
-import Context from "src/context";
-import { QueryResolvers } from "src/generated/graphql";
-import getUserId from "src/utils/getUserId";
+import Context from "../../context";
+import { QueryResolvers } from "../../generated/graphql";
+import getUserId from "../../utils/getUserId";
 
 const Query: QueryResolvers = {
   users: async (parent, args, { prisma, request }: Context, info) => {

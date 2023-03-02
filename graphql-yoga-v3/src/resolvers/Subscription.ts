@@ -1,9 +1,9 @@
 import { GraphQLError } from "graphql";
 import { pipe, filter, Repeater } from "graphql-yoga";
 import type { User } from "@prisma/client";
-import Context from "src/context";
-import { MutationType, SubscriptionResolvers } from "src/generated/graphql";
-import getUserId from "src/utils/getUserId";
+import Context from "../context";
+import { MutationType, SubscriptionResolvers } from "../generated/graphql";
+import getUserId from "../utils/getUserId";
 
 export interface UserSubscriptionPayload {
   user: {
