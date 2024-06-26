@@ -4,16 +4,13 @@ dotenv.config();
 import { createServer } from "node:http";
 import { createFetch } from "@whatwg-node/fetch";
 import { createYoga, createSchema, useExtendContext } from "graphql-yoga";
-import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { loadSchemaSync } from "@graphql-tools/load";
+import { loadFilesSync } from "@graphql-tools/load-files";
 import { resolvers } from "./resolvers";
 import prisma from "./prisma";
 import { pubSub } from "./pubsub";
 import Context from "./context";
 
-const typeDefs = loadSchemaSync("./**/*.graphql", {
-  loaders: [new GraphQLFileLoader()],
-});
+const typeDefs = loadFilesSync("./**/*.graphql");
 
 const schema = createSchema({ typeDefs, resolvers });
 

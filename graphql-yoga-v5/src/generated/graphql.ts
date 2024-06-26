@@ -4,57 +4,59 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Date: any;
-  Json: any;
-  Upload: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
+  Json: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
-  token: Scalars['String'];
+  token: Scalars['String']['output'];
   user: User;
 };
 
 export type BatchPayload = {
   __typename?: 'BatchPayload';
-  count?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']['output']>;
 };
 
 export type CreateUserInput = {
-  bio?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
-  name: Scalars['String'];
-  password?: InputMaybe<Scalars['String']>;
-  photoId?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
+  photoId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DeleteFileInput = {
-  filename: Scalars['String'];
-  id: Scalars['String'];
-  path: Scalars['String'];
+  filename: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  path: Scalars['String']['input'];
 };
 
 export type File = {
   __typename?: 'File';
-  filename: Scalars['String'];
-  id: Scalars['ID'];
-  mimetype: Scalars['String'];
-  path: Scalars['String'];
+  filename: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  mimetype: Scalars['String']['output'];
+  path: Scalars['String']['output'];
   post?: Maybe<Post>;
   user?: Maybe<User>;
 };
 
 export type LoginUserInput = {
-  email: Scalars['String'];
-  password?: InputMaybe<Scalars['String']>;
+  email: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -62,7 +64,7 @@ export type Mutation = {
   createUser: User;
   deleteFile: File;
   deleteFiles: BatchPayload;
-  incrementGlobalCounter: Scalars['Int'];
+  incrementGlobalCounter: Scalars['Int']['output'];
   login: AuthPayload;
   uploadFile: File;
   uploadFiles: Array<File>;
@@ -90,12 +92,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationUploadFileArgs = {
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
 };
 
 
 export type MutationUploadFilesArgs = {
-  files: Array<Scalars['Upload']>;
+  files: Array<Scalars['Upload']['input']>;
 };
 
 export enum MutationType {
@@ -107,20 +109,20 @@ export enum MutationType {
 export type Post = {
   __typename?: 'Post';
   author?: Maybe<User>;
-  content?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['ID']['output'];
   photos: Array<File>;
-  title: Scalars['String'];
-  updatedAt: Scalars['Date'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type Profile = {
   __typename?: 'Profile';
-  bio?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
-  updatedAt: Scalars['Date'];
+  bio?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['ID']['output'];
+  updatedAt: Scalars['Date']['output'];
   user?: Maybe<User>;
 };
 
@@ -134,31 +136,31 @@ export type Query = {
 
 
 export type QueryPostArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  globalCounter: Scalars['Int'];
+  globalCounter: Scalars['Int']['output'];
   user: UserSubscriptionPayload;
 };
 
 export type User = {
   __typename?: 'User';
-  createdAt: Scalars['Date'];
-  email: Scalars['String'];
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  password?: Maybe<Scalars['String']['output']>;
   photo?: Maybe<File>;
   posts?: Maybe<Array<Post>>;
   profile?: Maybe<Profile>;
-  updatedAt: Scalars['Date'];
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type UserSubscriptionPayload = {
@@ -234,27 +236,29 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   BatchPayload: ResolverTypeWrapper<BatchPayload>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateUserInput: CreateUserInput;
-  Date: ResolverTypeWrapper<Scalars['Date']>;
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   DeleteFileInput: DeleteFileInput;
   File: ResolverTypeWrapper<File>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Json: ResolverTypeWrapper<Scalars['Json']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Json: ResolverTypeWrapper<Scalars['Json']['output']>;
   LoginUserInput: LoginUserInput;
   Mutation: ResolverTypeWrapper<{}>;
   MutationType: MutationType;
   Post: ResolverTypeWrapper<Post>;
   Profile: ResolverTypeWrapper<Profile>;
   Query: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   User: ResolverTypeWrapper<User>;
   UserSubscriptionPayload: ResolverTypeWrapper<UserSubscriptionPayload>;
 };
@@ -263,22 +267,22 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   BatchPayload: BatchPayload;
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
   CreateUserInput: CreateUserInput;
-  Date: Scalars['Date'];
+  Date: Scalars['Date']['output'];
   DeleteFileInput: DeleteFileInput;
   File: File;
-  ID: Scalars['ID'];
-  Int: Scalars['Int'];
-  Json: Scalars['Json'];
+  ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
+  Json: Scalars['Json']['output'];
   LoginUserInput: LoginUserInput;
   Mutation: {};
   Post: Post;
   Profile: Profile;
   Query: {};
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   Subscription: {};
-  Upload: Scalars['Upload'];
+  Upload: Scalars['Upload']['output'];
   User: User;
   UserSubscriptionPayload: UserSubscriptionPayload;
 };

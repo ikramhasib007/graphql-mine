@@ -4,8 +4,9 @@ import { s3Client } from "../../s3Client";
 import { Upload } from "@aws-sdk/lib-storage";
 import Context from "../../context";
 import { DeleteFileInput, MutationResolvers } from "../../generated/graphql";
+import { ObjectCannedACL } from "@aws-sdk/client-s3";
 
-const subDirectory = "uploads";
+const subDirectory = process.env.DO_SPACES_BUCKET_PATH || 'development/images';
 
 const uploadToSpaces = async (file: File) => {
   const id = uuidv4();
@@ -15,7 +16,7 @@ const uploadToSpaces = async (file: File) => {
   const bucketParams = {
     Bucket: process.env.DO_SPACES_BUCKET,
     Key: path,
-    ACL: "public-read",
+    ACL: ObjectCannedACL.public_read,
     Body: file,
   };
 
