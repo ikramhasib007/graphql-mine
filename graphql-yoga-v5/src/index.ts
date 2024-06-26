@@ -25,7 +25,12 @@ const yoga = createYoga<Context, any>({
   schema,
   logging: true,
   plugins: [useExtendContext(() => ({ pubSub, prisma }))],
-  graphiql: process.env.NODE_ENV === "development",
+  graphiql:
+    process.env.NODE_ENV !== 'production'
+      ? {
+        subscriptionsProtocol: 'WS',
+      }
+      : false,
   fetchAPI: createFetch({
     formDataLimits: {
       // Maximum allowed file size (in bytes)
